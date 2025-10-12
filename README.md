@@ -2,7 +2,6 @@
 
 Đây là một công cụ dịch thuật mạnh mẽ và linh hoạt, cho phép bạn chụp ảnh một phần hoặc toàn bộ màn hình và dịch văn bản được nhận dạng ngay lập tức. Ứng dụng được xây dựng bằng PyQt5 và hỗ trợ nhiều dịch vụ OCR và dịch thuật khác nhau.
 
-![Screenshot](screenshot.png)
 
 ## Tính Năng Chính
 
