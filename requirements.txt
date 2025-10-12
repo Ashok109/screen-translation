@@ -1,0 +1,8 @@
+PyQt5
+deep-translator
+Pillow
+easyocr
+pynput
+openai
+google-generativeai
+opencv-python
