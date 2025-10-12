@@ -1,6 +1,6 @@
 # Dich Man Hinh - Công Cụ Dịch Thuật Màn Hình
 
-Đây là một công cụ dịch thuật mạnh mẽ và linh hoạt, cho phép bạn chụp ảnh một phần hoặc toàn bộ màn hình và dịch văn bản được nhận dạng ngay lập tức. Ứng dụng được xây dựng bằng PyQt5 và hỗ trợ nhiều dịch vụ OCR và dịch thuật khác nhau.
+Đây là một công cụ dịch thuật mạnh mẽ và linh hoạt, cho phép bạn chụp ảnh một phần hoặc toàn bộ màn hình và dịch văn bản được nhận dạng ngay lập tức. Ứng dụng được xây dựng bằng PyQt5 và hỗ trợ nhiều dịch vụ (trong tương lại :v) OCR và dịch thuật khác nhau.
 
 
 ## Tính Năng Chính
@@ -86,7 +86,7 @@ Cả hai kịch bản sẽ tự động thực hiện tất cả các bước c�
 - **Translate Full Screen:** Dịch toàn bộ màn hình.
 - **Phím Tắt `+` (mặc định):** Kích hoạt chế độ "Snip". Vẽ một vùng và ứng dụng sẽ dịch ngay lập tức mà không lưu lại vùng chọn.
 ### Các phím tắt bản dịch có thể tùy chỉnh trong file json
-- ** Mặc định: ** phím (`) kéo thả để dịch, phím (+) khi chọn xong vùng dịch nhấn để dịch, tổ hợp: <alt>+<ctrl>+f để dịch toàn bộ màn, phím (-) để xóa bản dịch
+- ** Mặc định: ** phím (`) kéo thả để dịch, phím (+) khi chọn xong vùng dịch nhấn để dịch, tổ hợp: alt + ctrl +f để dịch toàn bộ màn, phím (-) để xóa bản dịch
 ### Bảng Điều Khiển
 - **Display:**
     - **Font Size:** Điều chỉnh kích thước chữ của kết quả dịch (đặt là 0 để tự động).
