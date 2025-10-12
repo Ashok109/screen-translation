@@ -102,5 +102,5 @@ Cả hai kịch bản sẽ tự động thực hiện tất cả các bước c�
 - **Apply & Save Changes:** Nhấp vào nút này để lưu tất cả các thay đổi cấu hình và áp dụng chúng ngay lập tức.
 
 
-### © 2025 ViVuCloud. Nếu bạn chia sẽ vui lòng giữ nguyên thông tin tác giải
+### © 2025 ViVuCloud. Nếu bạn chia sẽ vui lòng giữ nguyên thông tin tác giả
 ### Nếu cần hỗ trợ bạn vui lòng liên hệ: https://www.facebook.com/VivuCloud
