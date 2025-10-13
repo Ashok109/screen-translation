@@ -66,6 +66,24 @@ Nếu máy bạn không có GPU hoặc GPU AMD hãy chạy file này.
     - **Nhấp đúp** vào file `run.bat`.
 
 ---
+#### **Lựa chọn 3: Chạy thủ công **
+
+Tạo môi trường ảo: python -m venv .venv
+
+Truy cập môi trường ảo: .venv\Scripts\activate
+
+Chạy cập nhật tourh với cpu: pip install torch torchvision torchaudio
+
+Chạy cập nhật tourh với GPU nvidia: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+Cập nhật thư viện cần thiết: pip install -r requirements.txt
+
+Khởi động ứng dụng: python main.py
+
+---
+
+
+
 
 Cả hai kịch bản sẽ tự động thực hiện tất cả các bước cần thiết:
 - Tạo môi trường ảo (`.venv`) để tránh xung đột thư viện.
