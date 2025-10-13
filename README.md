@@ -59,6 +59,7 @@ Sau khi tải dự án, bạn có hai lựa chọn để cài đặt và chạy 
 
 #### **Lựa chọn 2: Dùng file Batch (Đơn giản)**
 Phương pháp này đơn giản hơn nhưng có thể không nhận diện được GPU trên một số máy.
+Nếu máy bạn không có GPU hoặc GPU AMD hãy chạy file này.
 
 1.  **Chạy file `run.bat`:**
     - Di chuyển đến thư mục dự án.
