@@ -35,10 +35,10 @@ IF %ERRORLEVEL% EQU 0 (
     REM Check for NVIDIA GPU by looking for nvidia-smi.exe in its default path
     IF EXIST "%ProgramFiles%\NVIDIA Corporation\NVSMI\nvidia-smi.exe" (
         echo NVIDIA GPU detected. Installing PyTorch with CUDA support...
-        pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+        pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu126
     ) ELSE (
         echo No NVIDIA GPU detected. Installing CPU-only PyTorch...
-        pip install torch torchvision
+        pip3 install torch torchvision
     )
 
     IF %ERRORLEVEL% NEQ 0 (
