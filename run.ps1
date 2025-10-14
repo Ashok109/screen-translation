@@ -38,11 +38,11 @@ else {
     $nvidiaSmi = Get-Command nvidia-smi -ErrorAction SilentlyContinue
     if ($nvidiaSmi) {
         Write-Host "NVIDIA GPU detected. Installing PyTorch with CUDA support..."
-        pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+        pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu126
     }
     else {
         Write-Host "No NVIDIA GPU detected. Installing CPU-only PyTorch..."
-        pip install torch torchvision
+        pip3 install torch torchvision
     }
 
     if ($LASTEXITCODE -ne 0) {
