@@ -113,7 +113,7 @@ Cả hai kịch bản sẽ tự động thực hiện tất cả các bước c�
     - **Enabled:** Bật/tắt chế độ tự động dịch cho vùng đã chọn (`New Selection`).
     - **Interval (s):** Đặt khoảng thời gian (giây) giữa các lần tự động dịch.
 - **Configuration:**
-    - **OCR Langs:** Nhập các mã ngôn ngữ bạn muốn OCR nhận dạng, cách nhau bởi dấu phẩy (ví dụ: `en,ja,ch_sim`).
+    - **OCR Langs:** Nhập các mã ngôn ngữ bạn muốn OCR nhận dạng, cách nhau bởi dấu phẩy (ví dụ: `en,ja,ch_sim`), bạn có thể vào https://www.jaided.ai/easyocr để lấy đầy đủ mã ngôn ngữ được hỗ trợ.
     - **Translator:** Chọn dịch vụ dịch thuật bạn muốn sử dụng.
     - **API Keys & Models:** Nhập thông tin API key và tên model tương ứng với dịch vụ bạn chọn.
 - **Custom Prompt:**
