@@ -74,9 +74,9 @@ Truy cập môi trường ảo: .venv\Scripts\activate
 
 Chạy cập nhật tourh với cpu: pip install torch torchvision torchaudio
 
-Chạy cập nhật tourh với GPU nvidia: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+Chạy cập nhật tourh với GPU nvidia: pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
 
-Cập nhật thư viện cần thiết: pip install -r requirements.txt
+Cập nhật thư viện cần thiết: pip3 install -r requirements.txt
 
 Khởi động ứng dụng: python main.py
 
