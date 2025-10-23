@@ -1,98 +1,76 @@
-# AI-Powered Screen Translator Project
+# Screen Translator - Development Log & Technical Overview
 
 ## 1. Project Overview
 
-This project is a powerful OCR and translation application for Windows, developed using Python and PyQt5. It allows users to translate text directly from their screen in real-time. The primary use case is for translating text from games, images, or any content that cannot be easily copied.
+This project is a powerful OCR and translation application for Windows, developed using Python and PyQt5. It allows users to translate text directly from their screen in real-time. The application has evolved significantly to include multiple translation modes, support for various services, and numerous user experience improvements.
 
-The application features a movable and resizable overlay window that the user places over the text they wish to translate. A separate control panel allows the user to trigger the translation and close the application.
+## 2. Core Architecture
 
-## 2. Features
+The application's architecture is designed to be modular and responsive, separating the UI from heavy processing tasks.
 
-- **Live Screen Translation:** Translate text by simply placing an overlay window over it.
-- **Resizable and Movable Overlay:** The translation window can be freely moved and resized to fit any text area.
-- **GPU Acceleration:** Utilizes the user's GPU (if a CUDA-enabled PyTorch is installed) for fast OCR processing, preventing the UI from freezing.
-- **Accurate Overlay Rendering:** The translated text is rendered directly on top of the original text, preserving the layout and position.
-- **Multi-threaded Processing:** OCR and translation tasks are run in a separate thread to keep the main UI responsive at all times.
-- **Simple Controls:** A separate, small control panel provides simple "Translate" and "Close" buttons.
+- **`main.py` (AppController):** The central orchestrator. It initializes all components, manages application state (like auto-translation modes), handles configuration loading/saving, and connects signals from the UI to the appropriate backend logic.
+- **`ui/` Modules:** All PyQt5 components responsible for the user interface.
+    - `control_panel.py`: The main control hub for all user settings and actions.
+    - `display_window.py`: The transparent overlay that renders translation results.
+    - `selection_window.py`: The draggable/resizable frame for defining a persistent translation region.
+    - `snip_window.py`: A temporary overlay for the "Snip & Translate" feature.
+- **`core/` Modules:** Backend logic and processing threads.
+    - `worker.py`: A `QThread` that handles the primary OCR and translation workflow for single-shot translations (region, fullscreen, snip).
+    - `subtitle_processor.py`: A specialized `QThread` for the continuous subtitle translation mode. It manages a queue of screenshots to provide a smooth, real-time experience.
+    - `hotkey_manager.py`: Runs in a separate thread to listen for global hotkeys using `pynput`.
+    - `tts_manager.py`: Manages Text-to-Speech functionality in a non-blocking thread.
+- **`ocr/` and `translator/` Modules:** Wrappers for external OCR and translation services, providing a consistent interface for the core logic.
 
-## 3. Project Structure
+## 3. Recent Changes & Features (Development Log)
 
-The project is organized into several modules to separate concerns:
+This section details the implementation of recent features and bug fixes.
 
-```
-dichmanhinh/
-├── main.py                 # Main application entry point
-├── requirements.txt        # Python dependencies
-├── ai.md                   # This documentation file
-|
-├── ui/                     # User Interface modules (PyQt5)
-│   ├── overlay_window.py   # The main resizable translation window
-│   └── control_panel.py    # The small window with Translate/Close buttons
-|
-├── ocr/                    # Optical Character Recognition modules
-│   ├── base_ocr.py         # Abstract base class for OCR engines
-│   └── easy_ocr.py         # EasyOCR implementation
-|
-├── translator/             # Translation modules
-│   └── google_translate.py # Google Translate implementation
-|
-├── core/                   # Core application logic
-│   └── worker.py           # QThread worker for handling heavy tasks (OCR/translation)
-|
-└── assets/                 # For static assets like icons (currently unused)
-```
+### 3.1. Text-to-Speech (TTS) Implementation
+- **Goal:** Read the translated text aloud.
+- **Implementation:**
+    - Integrated `gTTS` (Google Text-to-Speech) for high-quality voice and `playsound` for audio playback.
+    - Created `core/tts_manager.py` to handle TTS operations in a separate `threading.Thread`. This prevents the main UI from freezing while the audio is being generated and played.
+    - Added a checkbox to `ui/control_panel.py` and connected its `toggled` signal to `main.py` to enable/disable the feature.
+    - Logic was added in `main.py`'s `handle_results` to call `tts_manager.speak()` only if TTS is enabled and the translation mode is not 'fullscreen' (to avoid reading the entire screen).
 
-## 4. Core Components
+### 3.2. Subtitle Mode Enhancements
+- **Goal:** Reduce flickering and automatically clear the overlay when no text is present.
+- **Flicker Reduction:**
+    - **Problem:** The overlay would flash blankly between subtitle updates because it was cleared before new text was rendered.
+    - **Solution:** Modified `ui/display_window.py`. The `set_results` method now checks if it's in subtitle mode. If it is, and if the incoming result list is empty, it simply `return`s, preserving the last displayed text. This turns a "blank" flicker into a "static" frame, which is much less jarring.
+- **Auto-Clear on No Text:**
+    - **Problem:** The last translated subtitle would remain on screen indefinitely even after dialogue ended.
+    - **Solution:**
+        1.  Added a new `no_text_detected = pyqtSignal()` to `core/subtitle_processor.py`.
+        2.  In the processor's `run` loop, if the OCR result is empty, this signal is emitted.
+        3.  In `main.py`, this new signal is connected directly to the `self.display_window.clear` method. This ensures the overlay is cleared explicitly and only when the OCR confirms no text is present.
 
-- **`ui/overlay_window.py`:** This is the main visual component. It's a frameless, transparent window that can be moved and resized. Its `paintEvent` is responsible for rendering the translated text results over a dark background, preserving the position of the original text.
-- **`ui/control_panel.py`:** A simple widget with two buttons. It emits signals (`translate_requested`, `close_requested`) that are connected to the main application logic.
-- **`core/worker.py`:** A `QThread` subclass that performs the heavy lifting. When a translation is requested, a `Worker` instance is created and moved to a new thread. It takes a screenshot, runs it through the OCR engine, translates the results, and emits a `finished` signal with the translated data.
-- **`ocr/easy_ocr.py`:** A wrapper for the `easyocr` library. It's configured to run on the GPU if possible and to recognize individual text lines rather than paragraphs for more accurate rendering.
+### 3.3. OCR Language Filtering
+- **Goal:** Prevent translating nonsensical text when the wrong OCR language is configured.
+- **Implementation:**
+    - Integrated the `langdetect` library.
+    - In `core/worker.py`, after OCR is performed, the code now iterates through the results.
+    - For each text block, it uses `langdetect.detect()` (within a `try...except` block to handle errors on short/invalid strings).
+    - It checks if the detected language is present in the user's configured `ocr_languages` list.
+    - Only text blocks that pass this language check are added to the list for translation, effectively filtering out garbage results.
 
-## 5. Workflow
+### 3.4. UI/UX Improvements
+- **Goal:** Make OCR language selection more user-friendly.
+- **Implementation:**
+    - In `ui/control_panel.py`, the `QLineEdit` for OCR languages was replaced with a more complex layout.
+    - A `QComboBox` was added with presets for common languages and language pairs (e.g., "English + Japanese").
+    - A `QCheckBox` ("Custom OCR Languages") was added.
+    - Logic was implemented to toggle the visibility and enabled state: when unchecked, the user selects from the preset `QComboBox`; when checked, the `QComboBox` is disabled and the original `QLineEdit` appears for custom input.
+    - The `get_config_data` and `set_config_data` methods were updated to handle this conditional logic, providing a seamless user experience.
 
-1.  The user launches the application via `main.py`.
-2.  `main.py` creates and displays both the `OverlayWindow` and the `ControlPanel`.
-3.  Signals from the `ControlPanel` are connected to slots in the `OverlayWindow` and the main `QApplication`.
-4.  The user moves and resizes the `OverlayWindow` to cover the desired text.
-5.  The user clicks the "Translate" button on the `ControlPanel`.
-6.  The `ControlPanel` emits the `translate_requested` signal.
-7.  The `OverlayWindow`'s `translate` slot is triggered.
-8.  The `OverlayWindow` takes a screenshot of the area it covers.
-9.  It creates a `Worker` thread, passing the path to the screenshot.
-10. The `Worker` thread starts, runs EasyOCR on the image, and translates each recognized piece of text.
-11. Once finished, the `Worker` emits a `finished` signal containing a list of `(bounding_box, translated_text)` tuples.
-12. The `OverlayWindow`'s `update_translation` slot receives this data and stores it.
-13. It calls `update()`, which triggers the `paintEvent`.
-14. The `paintEvent` draws a background over the original text and then draws the new translated text at the correct coordinates.
-
-## 6. Setup and Installation
-
-1.  **Clone the repository.**
-2.  **Create a virtual environment:**
-    ```bash
-    python -m venv .venv
-    source .venv/Scripts/activate
-    ```
-3.  **Install dependencies:**
-    - The project uses `PyQt5`, `easyocr`, and `googletrans`. `easyocr` requires a specific version of PyTorch for GPU acceleration.
-4.  **Install PyTorch with GPU support (IMPORTANT):**
-    - First, uninstall any existing CPU-only versions of PyTorch:
-      ```bash
-      pip uninstall torch torchvision -y
-      ```
-    - Then, install the version compatible with your NVIDIA driver's CUDA version. For CUDA 12.1 (common for modern GPUs), use the following command:
-      ```bash
-      pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
-      ```
-5.  **Install the remaining dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-## 7. How to Run
-
-After completing the setup, run the application with:
-
-```bash
-python main.py
+### 3.5. PyInstaller Packaging & Portability
+- **Goal:** Create a single, portable `.exe` file for easy distribution.
+- **Implementation:**
+    - **PyInstaller Setup:** Added `pyinstaller` to `requirements.txt` and created `build.spec` and `build.bat` files.
+    - **Portability Challenge:** By default, EasyOCR downloads models to a system-wide user directory (e.g., `~/.EasyOCR`). This is not portable.
+    - **Solution:**
+        1.  Modified `main.py` to create a `model_dump` directory in the same folder as the executable.
+        2.  Researched the `easyocr.Reader` class constructor to find the correct parameter for specifying a model directory.
+        3.  **Troubleshooting:** Initially failed with `TypeError` for `model_dir` and `model_storage_directory`. The final investigation of the library's source code revealed the correct parameter was indeed `model_storage_directory`, but the custom wrapper in `ocr/easy_ocr.py` was not built to accept it.
+        4.  **Final Fix:** Modified the `__init__` method of the `EasyOcr` class in `ocr/easy_ocr.py` to accept the `model_storage_directory` argument and pass it down to the underlying `easyocr.Reader`. This fixed the `TypeError` and enabled fully portable model storage.
+    - The `build.spec` file was configured to be simple, only including necessary data files like `translations.json` and letting the application download models at runtime.

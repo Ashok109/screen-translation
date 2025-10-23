@@ -11,7 +11,15 @@
     - **Dịch Toàn Màn Hình:** Chụp và dịch toàn bộ nội dung hiển thị trên màn hình.
 - **Tự Động Dịch Thông Minh:**
     - **Dịch Định Kỳ:** Tự động dịch lại vùng đã chọn hoặc toàn màn hình theo một khoảng thời gian tùy chỉnh.
-    - **Chế độ Dịch Phụ đề:** Một chế độ được tối ưu hóa đặc biệt cho việc dịch phụ đề phim hoặc video. Ứng dụng sẽ liên tục chụp vùng chọn, sử dụng bộ lọc thông minh để chỉ dịch khi phát hiện văn bản mới và có ý nghĩa, giúp tiết kiệm tài nguyên và tăng độ chính xác.
+- **Chế độ Dịch Phụ đề (Cải tiến):** Tối ưu hóa đặc biệt cho việc dịch phụ đề.
+    - Giảm đáng kể hiện tượng chớp nháy, mang lại trải nghiệm xem mượt mà.
+    - Tự động ẩn bản dịch khi không còn phụ đề trên màn hình, tránh che khuất nội dung.
+    - Sử dụng bộ lọc thông minh để chỉ dịch khi phát hiện văn bản mới và có ý nghĩa.
+- **Đọc văn bản dịch (Text-to-Speech):**
+    - Tự động đọc kết quả dịch sau mỗi lần dịch thành công (trừ chế độ toàn màn hình).
+    - Có thể bật/tắt dễ dàng trong bảng điều khiển.
+- **Lọc Ngôn Ngữ Thông Minh:**
+    - Tự động phát hiện ngôn ngữ của văn bản gốc. Nếu không khớp với cấu hình OCR của bạn, ứng dụng sẽ bỏ qua để ngăn chặn các bản dịch sai từ kết quả OCR vô nghĩa.
 - **Hỗ trợ Đa Dịch Vụ Dịch Thuật:**
     - **Google Translate** (mặc định, không cần API key)
     - **Gemini** (của Google)
@@ -19,8 +27,10 @@
     - **API Tùy Chỉnh** (tương thích với định dạng OpenAI)
 - **Tùy Chỉnh Cao:**
 - **Phím Tắt Toàn Diện:** Tùy chỉnh các phím tắt cho mọi chức năng dịch, bao gồm cả việc bật/tắt nhanh Chế độ Dịch Phụ đề (mặc định `Alt+Ctrl+S`).
-- **Ngôn Ngữ OCR:** Cấu hình nhiều ngôn ngữ để nhận dạng văn bản (ví dụ: `en,ja,ko`).
-    - **Prompt Tùy Chỉnh:** Viết prompt riêng cho các mô hình AI để tinh chỉnh kết quả dịch.
+- **Ngôn Ngữ OCR (Cải tiến):**
+    - Giao diện chọn ngôn ngữ được thiết kế lại với menu thả xuống cho các ngôn ngữ/cặp ngôn ngữ phổ biến (Anh, Nhật, Trung, Hàn, Việt).
+    - Dễ dàng chuyển sang chế độ tùy chỉnh để nhập nhiều ngôn ngữ khác theo nhu cầu.
+- **Prompt Tùy Chỉnh:** Viết prompt riêng cho các mô hình AI để tinh chỉnh kết quả dịch.
 - **Giao Diện Thân Thiện và Tiện Lợi:**
     - Bảng điều khiển nhỏ gọn, có thể di chuyển, mở rộng và luôn nằm trong màn hình.
     - Kết quả dịch được hiển thị ngay tại vị trí của văn bản gốc với tính năng "Lớp phủ thông minh".
@@ -97,6 +107,20 @@ Cả hai kịch bản sẽ tự động thực hiện tất cả các bước c�
 
 *Lưu ý: Lần chạy đầu tiên có thể mất vài phút để tải và cài đặt các thư viện.*
 
+## Đóng Gói Thành File Thực Thi (.exe) (Tùy chọn)
+
+Dự án đã được cấu hình sẵn để bạn có thể tự đóng gói thành một tệp `.exe` duy nhất để dễ dàng phân phối và sử dụng.
+
+1.  **Chạy file `build.bat`:**
+    - Di chuyển đến thư mục dự án.
+    - **Nhấp đúp** vào file `build.bat`.
+2.  Kịch bản sẽ tự động cài đặt các thư viện cần thiết (bao gồm `pyinstaller`) và bắt đầu quá trình đóng gói. Quá trình này có thể mất từ 5-15 phút.
+3.  Sau khi hoàn tất, bạn sẽ tìm thấy tệp `DichManHinh.exe` trong một thư mục mới có tên là `dist`.
+
+**Lưu ý quan trọng khi chạy file `.exe`:**
+- Lần đầu tiên bạn chạy file `.exe` và thực hiện một thao tác dịch, ứng dụng sẽ cần tải về các mô hình ngôn ngữ OCR cần thiết. Quá trình này yêu cầu kết nối internet và có thể mất vài phút.
+- Các mô hình sẽ được lưu vào thư mục `model_dump` nằm cùng cấp với file `.exe`, và sẽ được tái sử dụng cho những lần chạy sau.
+
 ## Hướng Dẫn Sử Dụng
 
 ### Giao Diện Chính
@@ -121,7 +145,7 @@ Cả hai kịch bản sẽ tự động thực hiện tất cả các bước c�
 - **History (Lịch sử):**
     - **Show History (Hiện lịch sử):** Mở cửa sổ xem lại lịch sử dịch. Cửa sổ này có nút `X` để xóa nhanh toàn bộ lịch sử.
 - **Configuration (Cấu hình):**
-    - **OCR Langs:** Nhập các mã ngôn ngữ bạn muốn OCR nhận dạng, cách nhau bởi dấu phẩy (ví dụ: `en,ja,ch_sim`), bạn có thể vào https://www.jaided.ai/easyocr để lấy đầy đủ mã ngôn ngữ được hỗ trợ.
+    - **OCR Language:** Chọn ngôn ngữ/cặp ngôn ngữ phổ biến từ menu thả xuống, hoặc tích vào ô "Tùy chỉnh" để nhập các mã ngôn ngữ khác (phân tách bằng dấu phẩy).
     - **Translator:** Chọn dịch vụ dịch thuật bạn muốn sử dụng.
     - **API Keys & Models:** Nhập thông tin API key và tên model tương ứng với dịch vụ bạn chọn.
 - **Custom Prompt:**
