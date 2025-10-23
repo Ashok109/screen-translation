@@ -10,8 +10,8 @@
         "en"
     ],
     "translator": "Gemini",
-    "openrouter_api_key": "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",
-    "gemini_api_key": "AIzaSyDArDTna56nYjqacgCFPedO4XBGPmsqqo8",
+    "openrouter_api_key": "",
+    "gemini_api_key": "",
     "gemini_model": "gemini-2.0-flash-lite",
     "custom_api_base_url": "https://api.x.ai/v1/",
     "custom_api_key": "",
