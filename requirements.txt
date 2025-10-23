@@ -6,3 +6,11 @@ pynput
 openai
 google-generativeai
 opencv-python
+numpy
+scikit-learn
+fuzzywuzzy
+python-Levenshtein
+gTTS
+playsound==1.2.2
+langdetect
+pyinstaller

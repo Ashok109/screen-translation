@@ -9,19 +9,23 @@
     - **Chụp và Dịch (Snip & Translate):** Dùng phím tắt để nhanh chóng chọn một vùng trên màn hình và dịch ngay lập tức.
     - **Dịch Vùng Cố Định:** Chọn một vùng cụ thể để dịch lặp đi lặp lại.
     - **Dịch Toàn Màn Hình:** Chụp và dịch toàn bộ nội dung hiển thị trên màn hình.
-- **Tự Động Dịch:** Tự động dịch lại vùng đã chọn theo một khoảng thời gian tùy chỉnh, lý tưởng cho việc theo dõi nội dung động như game hoặc video.
+- **Tự Động Dịch Thông Minh:**
+    - **Dịch Định Kỳ:** Tự động dịch lại vùng đã chọn hoặc toàn màn hình theo một khoảng thời gian tùy chỉnh.
+    - **Chế độ Dịch Phụ đề:** Một chế độ được tối ưu hóa đặc biệt cho việc dịch phụ đề phim hoặc video. Ứng dụng sẽ liên tục chụp vùng chọn, sử dụng bộ lọc thông minh để chỉ dịch khi phát hiện văn bản mới và có ý nghĩa, giúp tiết kiệm tài nguyên và tăng độ chính xác.
 - **Hỗ trợ Đa Dịch Vụ Dịch Thuật:**
     - **Google Translate** (mặc định, không cần API key)
     - **Gemini** (của Google)
     - **OpenRouter** (hỗ trợ nhiều mô hình AI)
     - **API Tùy Chỉnh** (tương thích với định dạng OpenAI)
 - **Tùy Chỉnh Cao:**
-    - **Phím Tắt:** Tùy chỉnh các phím tắt cho mọi chức năng dịch.
-    - **Ngôn Ngữ OCR:** Cấu hình nhiều ngôn ngữ để nhận dạng văn bản (ví dụ: `en,ja,ko`).
+- **Phím Tắt Toàn Diện:** Tùy chỉnh các phím tắt cho mọi chức năng dịch, bao gồm cả việc bật/tắt nhanh Chế độ Dịch Phụ đề (mặc định `Alt+Ctrl+S`).
+- **Ngôn Ngữ OCR:** Cấu hình nhiều ngôn ngữ để nhận dạng văn bản (ví dụ: `en,ja,ko`).
     - **Prompt Tùy Chỉnh:** Viết prompt riêng cho các mô hình AI để tinh chỉnh kết quả dịch.
-- **Giao Diện Thân Thiện:**
-    - Bảng điều khiển nhỏ gọn, có thể di chuyển và mở rộng.
-    - Kết quả dịch được hiển thị ngay tại vị trí của văn bản gốc.
+- **Giao Diện Thân Thiện và Tiện Lợi:**
+    - Bảng điều khiển nhỏ gọn, có thể di chuyển, mở rộng và luôn nằm trong màn hình.
+    - Kết quả dịch được hiển thị ngay tại vị trí của văn bản gốc với tính năng "Lớp phủ thông minh".
+    - Cửa sổ lịch sử dịch cho phép xem lại và có nút xóa nhanh.
+    - Dễ dàng hủy vùng chọn đã thiết lập.
     - Thay đổi cấu hình và áp dụng ngay lập tức mà không cần khởi động lại.
 
 ## Hướng Dẫn Cài Đặt và Chạy Ứng Dụng
@@ -74,7 +78,7 @@ Truy cập môi trường ảo: .venv\Scripts\activate
 
 Chạy cập nhật tourh với cpu: pip install torch torchvision torchaudio
 
-Chạy cập nhật tourh với GPU nvidia: pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+Chạy cập nhật tourh với GPU nvidia: pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 
 Cập nhật thư viện cần thiết: pip3 install -r requirements.txt
 
@@ -101,18 +105,22 @@ Cả hai kịch bản sẽ tự động thực hiện tất cả các bước c�
 - **Nhấn và kéo** bong bóng để di chuyển nó đến vị trí khác trên màn hình.
 
 ### Các Chức Năng Dịch
-- **New Selection:** Nhấp vào đây để mở cửa sổ chọn vùng. Vẽ một hình chữ nhật trên khu vực bạn muốn dịch. Vùng này sẽ được lưu lại cho các lần dịch sau và cho chế độ tự động dịch.
-- **Translate Full Screen:** Dịch toàn bộ màn hình.
-- **Phím Tắt `+` (mặc định):** Kích hoạt chế độ "Snip". Vẽ một vùng và ứng dụng sẽ dịch ngay lập tức mà không lưu lại vùng chọn.
-### Các phím tắt bản dịch có thể tùy chỉnh trong file json
-- ** Mặc định: ** phím (`) kéo thả để dịch, phím (+) khi chọn xong vùng dịch nhấn để dịch, tổ hợp: alt + ctrl +f để dịch toàn bộ màn, phím (-) để xóa bản dịch
+- **New Selection (Vùng chọn mới):** Nhấp để vẽ một hình chữ nhật trên khu vực bạn muốn dịch. Vùng này sẽ được lưu lại cho các chế độ tự động.
+- **Unselect Region (Hủy vùng chọn):** Nhấp để xóa vùng chọn hiện tại.
+- **Translate Full Screen (Dịch toàn màn hình):** Dịch toàn bộ nội dung hiển thị.
+- **Snip & Translate (Chụp và Dịch nhanh):** Sử dụng phím tắt (mặc định là `+`) để nhanh chóng chọn một vùng và dịch ngay lập tức mà không lưu lại vùng chọn.
+
 ### Bảng Điều Khiển
-- **Display:**
-    - **Font Size:** Điều chỉnh kích thước chữ của kết quả dịch (đặt là 0 để tự động).
-- **Auto Translate:**
-    - **Enabled:** Bật/tắt chế độ tự động dịch cho vùng đã chọn (`New Selection`).
-    - **Interval (s):** Đặt khoảng thời gian (giây) giữa các lần tự động dịch.
-- **Configuration:**
+- **Display (Hiển thị):**
+    - **Font Size (Cỡ chữ):** Điều chỉnh kích thước chữ của kết quả dịch (đặt là 0 để tự động).
+    - **Smart Overlay (Lớp phủ thông minh):** Bật/tắt chế độ che văn bản gốc bằng màu nền đã phân tích.
+- **Auto Translate (Tự động dịch):**
+    - **Translate periodically (Dịch định kỳ):** Bật để tự động dịch lại vùng chọn/toàn màn hình cuối cùng.
+    - **Subtitle mode (Chế độ phụ đề):** Bật để kích hoạt chế độ dịch phụ đề thông minh.
+    - **Interval (s) (Chu kỳ (giây)):** Đặt khoảng thời gian chung cho cả hai chế độ tự động dịch.
+- **History (Lịch sử):**
+    - **Show History (Hiện lịch sử):** Mở cửa sổ xem lại lịch sử dịch. Cửa sổ này có nút `X` để xóa nhanh toàn bộ lịch sử.
+- **Configuration (Cấu hình):**
     - **OCR Langs:** Nhập các mã ngôn ngữ bạn muốn OCR nhận dạng, cách nhau bởi dấu phẩy (ví dụ: `en,ja,ch_sim`), bạn có thể vào https://www.jaided.ai/easyocr để lấy đầy đủ mã ngôn ngữ được hỗ trợ.
     - **Translator:** Chọn dịch vụ dịch thuật bạn muốn sử dụng.
     - **API Keys & Models:** Nhập thông tin API key và tên model tương ứng với dịch vụ bạn chọn.

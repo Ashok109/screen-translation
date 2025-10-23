@@ -8,6 +8,7 @@ class HotkeyManager(QObject):
     region_translate_hotkey = pyqtSignal()
     fullscreen_translate_hotkey = pyqtSignal()
     clear_results_hotkey = pyqtSignal()
+    toggle_subtitle_mode_hotkey = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -21,6 +22,7 @@ class HotkeyManager(QObject):
             self.hotkeys['region_translate']: self.region_translate_hotkey.emit,
             self.hotkeys['fullscreen_translate']: self.fullscreen_translate_hotkey.emit,
             self.hotkeys['clear_results']: self.clear_results_hotkey.emit,
+            self.hotkeys['toggle_subtitle_mode']: self.toggle_subtitle_mode_hotkey.emit,
         }
 
     def get_default_hotkeys(self):
@@ -28,7 +30,8 @@ class HotkeyManager(QObject):
             "snip_translate": "<alt>+<ctrl>+t",
             "region_translate": "<alt>+<ctrl>+r",
             "fullscreen_translate": "<alt>+<ctrl>+f",
-            "clear_results": "-"
+            "clear_results": "-",
+            "toggle_subtitle_mode": "<alt>+<ctrl>+s"
         }
 
     def load_hotkeys(self):
