@@ -108,19 +108,37 @@ class Worker(QThread):
                 return
 
             valid_ocr_results = []
-            allowed_langs = self.config.get('ocr_languages', ['en'])
-            for box, text in ocr_results:
-                try:
-                    # Detect language and check if it's in the allowed list
-                    detected_lang = detect(text)
-                    if detected_lang in allowed_langs:
-                        valid_ocr_results.append((box, text))
-                    else:
-                        logging.warning(f"Skipping text due to language mismatch. Detected: {detected_lang}, Allowed: {allowed_langs}. Text: '{text}'")
-                except LangDetectException:
-                    # Could not detect language (e.g., too short, symbols only), skip it
-                    logging.warning(f"Could not detect language for text: '{text}'. Skipping.")
-                    continue
+            if self.config.get("language_filter_enabled", True):
+                # Mapping from langdetect codes to EasyOCR codes
+                lang_map = {
+                    'zh-cn': 'ch_sim',
+                    'zh-tw': 'ch_tra',
+                    'ja': 'ja',
+                    'ko': 'ko',
+                    'vi': 'vi',
+                    'en': 'en',
+                    # Add other common mappings as needed
+                }
+
+                allowed_langs = self.config.get('ocr_languages', ['en'])
+                for box, text in ocr_results:
+                    try:
+                        # Detect language and check if it's in the allowed list
+                        detected_lang = detect(text)
+                        # Convert to EasyOCR code before checking
+                        easyocr_lang_code = lang_map.get(detected_lang, detected_lang)
+                        
+                        if easyocr_lang_code in allowed_langs:
+                            valid_ocr_results.append((box, text))
+                        else:
+                            logging.warning(f"Skipping text due to language mismatch. Detected: {detected_lang} (mapped to {easyocr_lang_code}), Allowed: {allowed_langs}. Text: '{text}'")
+                    except LangDetectException:
+                        # Could not detect language (e.g., too short, symbols only), skip it
+                        logging.warning(f"Could not detect language for text: '{text}'. Skipping.")
+                        continue
+            else:
+                # If the filter is disabled, just use all the results from OCR
+                valid_ocr_results = ocr_results
             
             if not valid_ocr_results:
                 self.finished.emit([])

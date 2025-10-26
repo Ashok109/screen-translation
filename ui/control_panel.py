@@ -227,6 +227,11 @@ class ControlPanel(QWidget):
 
         self.binarize_checkbox = QCheckBox()
         preprocess_layout.addWidget(self.binarize_checkbox)
+
+        # Add the new language filter checkbox
+        self.language_filter_checkbox = QCheckBox()
+        preprocess_layout.addWidget(self.language_filter_checkbox)
+
         self.preprocess_group.setLayout(preprocess_layout)
         main_layout.addWidget(self.preprocess_group)
 
@@ -342,6 +347,7 @@ class ControlPanel(QWidget):
         self.preprocess_enabled_checkbox.setText(t("enable_preprocessing_checkbox"))
         self.upscale_checkbox.setText(t("upscale_checkbox"))
         self.binarize_checkbox.setText(t("binarize_checkbox"))
+        self.language_filter_checkbox.setText(t("language_filter_checkbox"))
         self.config_group.setTitle(t("config_group"))
         self.ocr_langs_label.setText(t("ocr_langs_label"))
         self.ocr_custom_checkbox.setText(t("ocr_custom_checkbox"))
@@ -419,6 +425,7 @@ class ControlPanel(QWidget):
             "upscale_enabled": self.upscale_checkbox.isChecked(),
             "upscale_factor": self.upscale_factor_spinbox.value(),
             "binarize_enabled": self.binarize_checkbox.isChecked(),
+            "language_filter_enabled": self.language_filter_checkbox.isChecked(),
             "ocr_languages": ocr_langs,
             "translator": self.translator_combo.currentText(),
             "openrouter_api_key": self.openrouter_key_input.text(),
@@ -443,6 +450,7 @@ class ControlPanel(QWidget):
         self.upscale_checkbox.setChecked(config.get("upscale_enabled", True))
         self.upscale_factor_spinbox.setValue(config.get("upscale_factor", 2.0))
         self.binarize_checkbox.setChecked(config.get("binarize_enabled", True))
+        self.language_filter_checkbox.setChecked(config.get("language_filter_enabled", True))
         
         # Set OCR language input based on config
         config_langs = sorted(config.get("ocr_languages", ["en"]))

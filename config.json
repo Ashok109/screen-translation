@@ -7,9 +7,9 @@
         "toggle_subtitle_mode": "."
     },
     "ocr_languages": [
-        "en"
+        "ch_sim"
     ],
-    "translator": "Gemini",
+    "translator": "Google",
     "openrouter_api_key": "",
     "gemini_api_key": "",
     "gemini_model": "gemini-2.0-flash-lite",
@@ -27,5 +27,6 @@
     "history_font_color": "#FF0000",
     "original_font_color": "#00FF00",
     "smart_overlay_enabled": true,
-    "tts_enabled": true
+    "tts_enabled": true,
+    "language_filter_enabled": false
 }

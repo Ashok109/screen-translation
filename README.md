@@ -107,7 +107,7 @@ Cả hai kịch bản sẽ tự động thực hiện tất cả các bước c�
 
 *Lưu ý: Lần chạy đầu tiên có thể mất vài phút để tải và cài đặt các thư viện.*
 
-## Đóng Gói Thành File Thực Thi (.exe) (Tùy chọn)
+## Đóng Gói Thành File Thực Thi (.exe) (Tùy chọn KHÔNG ỔN ĐỊNH)
 
 Dự án đã được cấu hình sẵn để bạn có thể tự đóng gói thành một tệp `.exe` duy nhất để dễ dàng phân phối và sử dụng.
 

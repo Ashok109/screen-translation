@@ -1,1 +1,11 @@
 /.venv
+/ui/__pycache__
+/ui/__pycache__
+/translator/__pycache__
+/translator/__pycache__
+/build
+/core/__pycache__
+/core/__pycache__
+/core/__pycache__
+/dist
+/model_dump

@@ -108,7 +108,8 @@ class AppController:
             "history_font_color": "#99EEFF",
             "original_font_color": "#CCCCCC",
             "smart_overlay_enabled": True,
-            "tts_enabled": False
+            "tts_enabled": False,
+            "language_filter_enabled": True
         }
         try:
             with open(self.config_file, 'r') as f:
