@@ -440,6 +440,7 @@ class AppController:
 
     def start_snip_mode(self):
         logging.info("Starting snip mode.")
+        self.display_window.clear() # Clear previous results immediately
         self.snip_window.show()
         self.snip_window.activateWindow()
         self.snip_window.raise_()

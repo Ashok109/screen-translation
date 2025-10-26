@@ -9,7 +9,7 @@
     "ocr_languages": [
         "ch_sim"
     ],
-    "translator": "Google",
+    "translator": "Gemini",
     "openrouter_api_key": "",
     "gemini_api_key": "",
     "gemini_model": "gemini-2.0-flash-lite",
