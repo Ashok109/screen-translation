@@ -105,6 +105,8 @@ class AppController:
             "use_custom_prompt": False,
             "custom_prompt": "",
             "language": "en",
+            "dest_lang": "vi",
+            "dest_lang_custom_enabled": False,
             "history_font_color": "#99EEFF",
             "original_font_color": "#CCCCCC",
             "smart_overlay_enabled": True,

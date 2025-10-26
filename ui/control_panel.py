@@ -270,6 +270,31 @@ class ControlPanel(QWidget):
         config_layout.addLayout(ocr_v_layout)
         # --- End OCR Language Selection ---
 
+        # --- Destination Language Selection ---
+        dest_lang_v_layout = QVBoxLayout()
+        dest_lang_h_layout = QHBoxLayout()
+        self.dest_lang_label = QLabel()
+        dest_lang_h_layout.addWidget(self.dest_lang_label)
+
+        self.dest_lang_combo = QComboBox()
+        self.dest_lang_presets = {
+            "Vietnamese": "vi", "English": "en", "Japanese": "ja",
+            "Chinese (Simplified)": "zh-cn", "Korean": "ko"
+        }
+        self.dest_lang_combo.addItems(self.dest_lang_presets.keys())
+        dest_lang_h_layout.addWidget(self.dest_lang_combo)
+        dest_lang_v_layout.addLayout(dest_lang_h_layout)
+
+        self.dest_lang_custom_checkbox = QCheckBox()
+        dest_lang_v_layout.addWidget(self.dest_lang_custom_checkbox)
+
+        self.dest_lang_input = QLineEdit()
+        self.dest_lang_input.setVisible(False)
+        dest_lang_v_layout.addWidget(self.dest_lang_input)
+
+        config_layout.addLayout(dest_lang_v_layout)
+        # --- End Destination Language Selection ---
+
         translator_layout = QHBoxLayout()
         self.translator_label = QLabel()
         translator_layout.addWidget(self.translator_label)
@@ -351,6 +376,8 @@ class ControlPanel(QWidget):
         self.config_group.setTitle(t("config_group"))
         self.ocr_langs_label.setText(t("ocr_langs_label"))
         self.ocr_custom_checkbox.setText(t("ocr_custom_checkbox"))
+        self.dest_lang_label.setText(t("dest_lang_label"))
+        self.dest_lang_custom_checkbox.setText(t("dest_lang_custom_checkbox"))
         self.translator_label.setText(t("translator_label"))
         self.openrouter_key_input.setPlaceholderText(t("openrouter_api_key_placeholder"))
         self.openrouter_model_input.setPlaceholderText(t("openrouter_model_placeholder"))
@@ -388,6 +415,12 @@ class ControlPanel(QWidget):
         self.translator_combo.currentIndexChanged.connect(self.update_visibility)
         self.use_custom_prompt_checkbox.toggled.connect(self.update_visibility)
         self.ocr_custom_checkbox.toggled.connect(self.update_ocr_input_visibility)
+        self.dest_lang_custom_checkbox.toggled.connect(self.update_dest_lang_input_visibility)
+
+    def update_dest_lang_input_visibility(self, checked):
+        self.dest_lang_combo.setDisabled(checked)
+        self.dest_lang_input.setVisible(checked)
+        self.adjustSize()
 
     def update_ocr_input_visibility(self, checked):
         self.ocr_lang_combo.setDisabled(checked)
@@ -420,7 +453,16 @@ class ControlPanel(QWidget):
             selected_preset = self.ocr_lang_combo.currentText()
             ocr_langs = self.ocr_lang_presets.get(selected_preset, ["en"])
 
+        dest_lang = ""
+        if self.dest_lang_custom_checkbox.isChecked():
+            dest_lang = self.dest_lang_input.text().strip()
+        else:
+            selected_preset = self.dest_lang_combo.currentText()
+            dest_lang = self.dest_lang_presets.get(selected_preset, "vi")
+
         return {
+            "dest_lang": dest_lang,
+            "dest_lang_custom_enabled": self.dest_lang_custom_checkbox.isChecked(),
             "preprocess_enabled": self.preprocess_enabled_checkbox.isChecked(),
             "upscale_enabled": self.upscale_checkbox.isChecked(),
             "upscale_factor": self.upscale_factor_spinbox.value(),
@@ -468,6 +510,28 @@ class ControlPanel(QWidget):
             self.lang_input.setText(",".join(config_langs))
 
         self.update_ocr_input_visibility(self.ocr_custom_checkbox.isChecked())
+
+        # Set Destination Language input based on config
+        config_dest_lang = config.get("dest_lang", "vi")
+        custom_enabled = config.get("dest_lang_custom_enabled", False)
+        self.dest_lang_custom_checkbox.setChecked(custom_enabled)
+
+        preset_match_dest = None
+        if not custom_enabled:
+            for preset_name, preset_code in self.dest_lang_presets.items():
+                if preset_code == config_dest_lang:
+                    preset_match_dest = preset_name
+                    break
+        
+        if preset_match_dest:
+            self.dest_lang_combo.setCurrentText(preset_match_dest)
+        else:
+            # If no preset matches (or custom is enabled), set custom
+            self.dest_lang_custom_checkbox.setChecked(True)
+            self.dest_lang_input.setText(config_dest_lang)
+
+        self.update_dest_lang_input_visibility(self.dest_lang_custom_checkbox.isChecked())
+
 
         self.translator_combo.setCurrentText(config.get("translator", "Google"))
         self.openrouter_key_input.setText(config.get("openrouter_api_key", ""))

@@ -101,8 +101,9 @@ class SubtitleProcessor(QThread):
                     logging.info("No text left to translate after filtering.")
                     os.remove(oldest_file)
                     continue
-
-                translated_texts = self.translator.translate_batch(texts_to_translate, dest_lang='vi')
+                
+                dest_lang = self.config.get("dest_lang", "vi")
+                translated_texts = self.translator.translate_batch(texts_to_translate, dest_lang=dest_lang)
 
                 # 4. Prepare results for display
                 display_results = []

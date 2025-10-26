@@ -148,9 +148,10 @@ class Worker(QThread):
             texts_to_translate = [text for box, text in valid_ocr_results]
             
             translated_texts = ["" for _ in texts_to_translate]
-            
+            dest_lang = self.config.get("dest_lang", "vi")
+
             with concurrent.futures.ThreadPoolExecutor() as executor:
-                future_to_index = {executor.submit(self.translator.translate_batch, [text], dest_lang='vi'): i for i, text in enumerate(texts_to_translate)}
+                future_to_index = {executor.submit(self.translator.translate_batch, [text], dest_lang=dest_lang): i for i, text in enumerate(texts_to_translate)}
                 
                 for future in concurrent.futures.as_completed(future_to_index):
                     index = future_to_index[future]

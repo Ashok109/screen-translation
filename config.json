@@ -9,7 +9,7 @@
     "ocr_languages": [
         "ch_sim"
     ],
-    "translator": "Gemini",
+    "translator": "Google",
     "openrouter_api_key": "",
     "gemini_api_key": "",
     "gemini_model": "gemini-2.0-flash-lite",
@@ -28,5 +28,7 @@
     "original_font_color": "#00FF00",
     "smart_overlay_enabled": true,
     "tts_enabled": true,
-    "language_filter_enabled": false
+    "language_filter_enabled": false,
+    "dest_lang": "vi",
+    "dest_lang_custom_enabled": false
 }
