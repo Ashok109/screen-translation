@@ -18,8 +18,12 @@
 - **Đọc văn bản dịch (Text-to-Speech):**
     - Tự động đọc kết quả dịch sau mỗi lần dịch thành công (trừ chế độ toàn màn hình).
     - Có thể bật/tắt dễ dàng trong bảng điều khiển.
-- **Lọc Ngôn Ngữ Thông Minh:**
-    - Tự động phát hiện ngôn ngữ của văn bản gốc. Nếu không khớp với cấu hình OCR của bạn, ứng dụng sẽ bỏ qua để ngăn chặn các bản dịch sai từ kết quả OCR vô nghĩa.
+- **Lọc Ngôn Ngữ Thông Minh (Tùy chọn):**
+    - Tự động phát hiện ngôn ngữ của văn bản gốc để ngăn chặn các bản dịch sai từ kết quả OCR vô nghĩa.
+    - Có thể **tắt/bật** bộ lọc này trong bảng điều khiển để dịch mọi văn bản mà OCR nhận dạng được, bất kể ngôn ngữ.
+- **Hỗ trợ Đa Ngôn Ngữ Đích:**
+    - Dễ dàng chọn ngôn ngữ đích từ danh sách các ngôn ngữ phổ biến.
+    - Chuyển sang chế độ tùy chỉnh để nhập bất kỳ mã ngôn ngữ nào bạn muốn dịch sang.
 - **Hỗ trợ Đa Dịch Vụ Dịch Thuật:**
     - **Google Translate** (mặc định, không cần API key)
     - **Gemini** (của Google)
@@ -145,9 +149,12 @@ Dự án đã được cấu hình sẵn để bạn có thể tự đóng gói 
 - **History (Lịch sử):**
     - **Show History (Hiện lịch sử):** Mở cửa sổ xem lại lịch sử dịch. Cửa sổ này có nút `X` để xóa nhanh toàn bộ lịch sử.
 - **Configuration (Cấu hình):**
-    - **OCR Language:** Chọn ngôn ngữ/cặp ngôn ngữ phổ biến từ menu thả xuống, hoặc tích vào ô "Tùy chỉnh" để nhập các mã ngôn ngữ khác (phân tách bằng dấu phẩy).
+    - **OCR Language:** Chọn ngôn ngữ/cặp ngôn ngữ phổ biến từ menu thả xuống, hoặc tích vào ô "Tùy chỉnh" để nhập các mã ngôn ngữ khác.
+    - **Destination Language:** Chọn ngôn ngữ đích từ menu thả xuống, hoặc tích vào ô "Tùy chỉnh" để nhập mã ngôn ngữ bất kỳ.
     - **Translator:** Chọn dịch vụ dịch thuật bạn muốn sử dụng.
     - **API Keys & Models:** Nhập thông tin API key và tên model tương ứng với dịch vụ bạn chọn.
+- **Image Preprocessing (Tiền xử lý ảnh):**
+    - **Enable Language Filter:** Bật/tắt tính năng lọc ngôn ngữ thông minh.
 - **Custom Prompt:**
     - **Use Custom Prompt:** Bật tính năng này để sử dụng prompt của riêng bạn cho các dịch vụ AI.
     - **Hộp văn bản:** Viết prompt của bạn. Sử dụng `{text}` để chèn văn bản gốc và `{dest_lang}` để chèn ngôn ngữ đích.
