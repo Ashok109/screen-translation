@@ -1,8 +1,8 @@
-import easyocr
 from ocr.base_ocr import BaseOcr
 
 class EasyOcr(BaseOcr):
     def __init__(self, languages=['en'], model_storage_directory=None):
+        import easyocr
         # EasyOCR will automatically use GPU if a CUDA-enabled PyTorch is installed.
         self.reader = easyocr.Reader(languages, model_storage_directory=model_storage_directory)
 

@@ -12,7 +12,6 @@ from ui.snip_window import SnipWindow
 from ui.control_panel import ControlPanel
 from ui.chat_window import ChatWindow
 from ui.translator import Translator as UiTranslator
-from ocr.easy_ocr import EasyOcr
 from ocr.gemini_ocr import GeminiOcr
 from core.hotkey_manager import HotkeyManager
 from core.worker import Worker
@@ -133,6 +132,7 @@ class AppController:
 
     def _load_easy_ocr(self, show_error=False):
         try:
+            from ocr.easy_ocr import EasyOcr
             ocr_langs = self.config.get('ocr_languages', ['en'])
             engine = EasyOcr(languages=ocr_langs, model_storage_directory=self.model_dir)
             print(f"OCR engine loaded: EasyOCR for languages: {ocr_langs}")

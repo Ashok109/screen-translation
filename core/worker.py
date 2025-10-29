@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 from sklearn.cluster import KMeans
 from PyQt5.QtCore import QThread, pyqtSignal
-from ocr.easy_ocr import EasyOcr
+from ocr.base_ocr import BaseOcr
 from translator.base_translator import BaseTranslator
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 class Worker(QThread):
     finished = pyqtSignal(list)
 
-    def __init__(self, image_path: str, ocr_engine: EasyOcr, translator: BaseTranslator, config: dict):
+    def __init__(self, image_path: str, ocr_engine: BaseOcr, translator: BaseTranslator, config: dict):
         super().__init__()
         self.image = cv2.imread(image_path)
         if self.image is None:
