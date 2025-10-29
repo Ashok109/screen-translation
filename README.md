@@ -24,6 +24,9 @@
 - **Hỗ trợ Đa Ngôn Ngữ Đích:**
     - Dễ dàng chọn ngôn ngữ đích từ danh sách các ngôn ngữ phổ biến.
     - Chuyển sang chế độ tùy chỉnh để nhập bất kỳ mã ngôn ngữ nào bạn muốn dịch sang.
+- **Hỗ trợ Đa Công Cụ OCR (Mới):**
+    - **EasyOCR (Mặc định, Local):** Chạy trực tiếp trên máy tính của bạn, không cần API key và hoạt động offline. Tối ưu cho GPU NVIDIA nhưng cũng hoạt động trên CPU.
+    - **Gemini (Cloud):** Sử dụng API của Google để nhận dạng văn bản, lý tưởng cho các máy cấu hình yếu không có GPU mạnh. Yêu cầu API key.
 - **Hỗ trợ Đa Dịch Vụ Dịch Thuật:**
     - **Google Translate** (mặc định, không cần API key)
     - **Gemini** (của Google)
@@ -135,7 +138,7 @@ Dự án đã được cấu hình sẵn để bạn có thể tự đóng gói 
 ### Các Chức Năng Dịch
 - **New Selection (Vùng chọn mới):** Nhấp để vẽ một hình chữ nhật trên khu vực bạn muốn dịch. Vùng này sẽ được lưu lại cho các chế độ tự động.
 - **Unselect Region (Hủy vùng chọn):** Nhấp để xóa vùng chọn hiện tại.
-- **Translate Full Screen (Dịch toàn màn hình):** Dịch toàn bộ nội dung hiển thị.
+- **Translate Full Screen (Dịch toàn màn hình):** Dịch toàn bộ nội dung hiển thị. (*Lưu ý: Tính năng này chỉ hoạt động với công cụ EasyOCR*).
 - **Snip & Translate (Chụp và Dịch nhanh):** Sử dụng phím tắt (mặc định là `+`) để nhanh chóng chọn một vùng và dịch ngay lập tức mà không lưu lại vùng chọn.
 
 ### Bảng Điều Khiển
@@ -149,10 +152,11 @@ Dự án đã được cấu hình sẵn để bạn có thể tự đóng gói 
 - **History (Lịch sử):**
     - **Show History (Hiện lịch sử):** Mở cửa sổ xem lại lịch sử dịch. Cửa sổ này có nút `X` để xóa nhanh toàn bộ lịch sử.
 - **Configuration (Cấu hình):**
-    - **OCR Language:** Chọn ngôn ngữ/cặp ngôn ngữ phổ biến từ menu thả xuống, hoặc tích vào ô "Tùy chỉnh" để nhập các mã ngôn ngữ khác.
-    - **Destination Language:** Chọn ngôn ngữ đích từ menu thả xuống, hoặc tích vào ô "Tùy chỉnh" để nhập mã ngôn ngữ bất kỳ.
-    - **Translator:** Chọn dịch vụ dịch thuật bạn muốn sử dụng.
-    - **API Keys & Models:** Nhập thông tin API key và tên model tương ứng với dịch vụ bạn chọn.
+    - **OCR Engine:** Chọn công cụ nhận dạng văn bản (EasyOCR hoặc Gemini).
+    - **OCR Language:** Tùy chỉnh ngôn ngữ cho EasyOCR.
+    - **Destination Language:** Chọn ngôn ngữ đích.
+    - **Translator:** Chọn dịch vụ dịch thuật.
+    - **API Keys & Models:** Nhập thông tin API key và tên model riêng biệt cho từng dịch vụ (Gemini OCR, Gemini Translator, OpenRouter, v.v.).
 - **Image Preprocessing (Tiền xử lý ảnh):**
     - **Enable Language Filter:** Bật/tắt tính năng lọc ngôn ngữ thông minh.
 - **Custom Prompt:**

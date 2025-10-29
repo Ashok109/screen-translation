@@ -13,6 +13,7 @@ from ui.control_panel import ControlPanel
 from ui.chat_window import ChatWindow
 from ui.translator import Translator as UiTranslator
 from ocr.easy_ocr import EasyOcr
+from ocr.gemini_ocr import GeminiOcr
 from core.hotkey_manager import HotkeyManager
 from core.worker import Worker
 from core.subtitle_processor import SubtitleProcessor
@@ -78,9 +79,9 @@ class AppController:
         self.display_window.show()
         self.snip_window.hide()
 
-        self.load_services()
         self.setup_connections()
         self.setup_hotkeys()
+        self.load_services()
 
     def load_config(self):
         default_config = {
@@ -89,6 +90,7 @@ class AppController:
                 "fullscreen_translate": "<alt>+<ctrl>+f", "clear_results": "-",
                 "toggle_subtitle_mode": "<alt>+<ctrl>+s"
             },
+            "ocr_engine": "EasyOCR",
             "ocr_languages": ["en"],
             "translator": "Google",
             "preprocess_enabled": True,
@@ -96,8 +98,10 @@ class AppController:
             "upscale_factor": 2.0,
             "binarize_enabled": True,
             "openrouter_api_key": "",
+            "gemini_ocr_api_key": "",
+            "gemini_ocr_model": "gemini-2.5-flash-lite",
             "gemini_api_key": "",
-            "gemini_model": "gemini-1.5-flash",
+            "gemini_model": "gemini-2.5-flash-lite",
             "custom_api_base_url": "",
             "custom_api_key": "",
             "custom_api_model": "",
@@ -127,13 +131,61 @@ class AppController:
         with open(self.config_file, 'w') as f:
             json.dump(self.config, f, indent=4)
 
+    def _load_easy_ocr(self, show_error=False):
+        try:
+            ocr_langs = self.config.get('ocr_languages', ['en'])
+            engine = EasyOcr(languages=ocr_langs, model_storage_directory=self.model_dir)
+            print(f"OCR engine loaded: EasyOCR for languages: {ocr_langs}")
+            return engine
+        except Exception as e:
+            print(f"Failed to load EasyOCR: {e}")
+            if show_error:
+                QMessageBox.warning(self.control_panel, "EasyOCR Error", f"Failed to load EasyOCR: {e}")
+            return None
+
+    def _load_gemini_ocr(self, show_error=False):
+        try:
+            api_key = self.config.get("gemini_ocr_api_key")
+            model_name = self.config.get("gemini_ocr_model", "gemini-2.5-flash-lite")
+            if not api_key:
+                raise ValueError("Gemini OCR API key is missing.")
+            engine = GeminiOcr(api_key=api_key, model_name=model_name)
+            print(f"OCR engine loaded: Gemini (Model: {model_name})")
+            return engine
+        except Exception as e:
+            print(f"Failed to load Gemini OCR: {e}")
+            if show_error:
+                QMessageBox.warning(self.control_panel, "Gemini OCR Error", f"Failed to load Gemini OCR: {e}")
+            return None
+
     def load_services(self):
         # Load OCR Engine
-        print("Loading OCR engine...")
-        ocr_langs = self.config.get('ocr_languages', ['en'])
-        self.ocr_engine = EasyOcr(languages=ocr_langs, model_storage_directory=self.model_dir)
-        print(f"OCR engine loaded for languages: {ocr_langs}")
-        print(f"OCR models will be stored in: {self.model_dir}")
+        print("Attempting to load OCR engine...")
+        preferred_engine = self.config.get("ocr_engine", "EasyOCR")
+        self.ocr_engine = None
+
+        if preferred_engine == "Gemini":
+            self.ocr_engine = self._load_gemini_ocr(show_error=True)
+            if not self.ocr_engine:
+                print("Gemini failed, falling back to EasyOCR...")
+                self.ocr_engine = self._load_easy_ocr()
+                if self.ocr_engine:
+                    self.config["ocr_engine"] = "EasyOCR"
+        else: # Preferred is EasyOCR or default
+            self.ocr_engine = self._load_easy_ocr(show_error=True)
+            if not self.ocr_engine:
+                print("EasyOCR failed, falling back to Gemini...")
+                self.ocr_engine = self._load_gemini_ocr()
+                if self.ocr_engine:
+                    self.config["ocr_engine"] = "Gemini"
+
+        if not self.ocr_engine:
+            QMessageBox.critical(self.control_panel, "OCR Error", "All OCR engines failed to load. Please check your configuration (e.g., API keys) or installation.")
+            # App will continue to run, allowing user to fix config.
+        
+        # Update the UI to reflect the final loaded engine
+        self.control_panel.set_config_data(self.config)
+
 
         # Load Translator
         print("Loading Translator...")
@@ -464,12 +516,20 @@ class AppController:
         self.start_translation(geom)
 
     def translate_fullscreen(self):
+        if self.config.get("ocr_engine") == "Gemini":
+            QMessageBox.warning(self.control_panel, "Feature Not Supported", "Fullscreen translation is not supported when using the Gemini OCR engine. Please switch to EasyOCR for this feature.")
+            return
+
         self.last_translation_mode = 'fullscreen'
         logging.info("Fullscreen translation triggered.")
         screen_rect = QApplication.primaryScreen().geometry()
         self.start_translation(screen_rect)
 
     def start_translation(self, geometry):
+        if not self.ocr_engine:
+            QMessageBox.warning(self.control_panel, "OCR Not Ready", "The OCR engine is not configured or failed to load. Please check your settings.")
+            return
+
         if self.is_translating:
             logging.warning("Translation already in progress. Skipping new request.")
             return

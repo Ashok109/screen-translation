@@ -7,16 +7,16 @@
         "toggle_subtitle_mode": "."
     },
     "ocr_languages": [
-        "ch_sim"
+        "en"
     ],
-    "translator": "Google",
-    "openrouter_api_key": "",
+    "translator": "Gemini",
+    "openrouter_api_key": "sk",
     "gemini_api_key": "",
     "gemini_model": "gemini-2.0-flash-lite",
     "custom_api_base_url": "https://api.x.ai/v1/",
     "custom_api_key": "",
     "custom_api_model": "grok-3-mini",
-    "openrouter_model": "alibaba/tongyi-deepresearch-30b-a3b:free",
+    "openrouter_model": "meta-llama/llama-3.3-8b-instruct:free",
     "use_custom_prompt": true,
     "custom_prompt": "H\u00e3y d\u1ecbch \u0111o\u1ea1n v\u0103n b\u1ea3n sang {dest_lang}.\n\n**V\u0103n b\u1ea3n g\u1ed1c:** `{text}`\n\n**Ng\u00f4n ng\u1eef \u0111\u00edch:** {dest_lang}\n\nCh\u1ec9 d\u1ecbch kh\u00f4ng gi\u1ea3i th\u00edch g\u00ec th\u00eam.",
     "preprocess_enabled": true,
@@ -27,8 +27,11 @@
     "history_font_color": "#FF0000",
     "original_font_color": "#00FF00",
     "smart_overlay_enabled": true,
-    "tts_enabled": true,
+    "tts_enabled": false,
     "language_filter_enabled": false,
     "dest_lang": "vi",
-    "dest_lang_custom_enabled": false
+    "dest_lang_custom_enabled": false,
+    "ocr_engine": "Gemini",
+    "gemini_ocr_api_key": "",
+    "gemini_ocr_model": "gemini-2.5-flash-lite"
 }

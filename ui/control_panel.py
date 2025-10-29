@@ -239,6 +239,22 @@ class ControlPanel(QWidget):
         self.config_group = QGroupBox()
         config_layout = QVBoxLayout()
 
+        # --- OCR Engine Selection ---
+        ocr_engine_layout = QHBoxLayout()
+        self.ocr_engine_label = QLabel("OCR Engine:") # Text will be set by retranslate_ui
+        ocr_engine_layout.addWidget(self.ocr_engine_label)
+        self.ocr_engine_combo = QComboBox()
+        self.ocr_engine_combo.addItems(["EasyOCR", "Gemini"])
+        ocr_engine_layout.addWidget(self.ocr_engine_combo)
+        config_layout.addLayout(ocr_engine_layout)
+
+        self.gemini_ocr_key_input = QLineEdit()
+        self.gemini_ocr_key_input.setEchoMode(QLineEdit.Password)
+        config_layout.addWidget(self.gemini_ocr_key_input)
+
+        self.gemini_ocr_model_input = QLineEdit()
+        config_layout.addWidget(self.gemini_ocr_model_input)
+
         # --- OCR Language Selection ---
         ocr_v_layout = QVBoxLayout()
         ocr_h_layout = QHBoxLayout()
@@ -374,6 +390,7 @@ class ControlPanel(QWidget):
         self.binarize_checkbox.setText(t("binarize_checkbox"))
         self.language_filter_checkbox.setText(t("language_filter_checkbox"))
         self.config_group.setTitle(t("config_group"))
+        self.ocr_engine_label.setText(t("ocr_engine_label"))
         self.ocr_langs_label.setText(t("ocr_langs_label"))
         self.ocr_custom_checkbox.setText(t("ocr_custom_checkbox"))
         self.dest_lang_label.setText(t("dest_lang_label"))
@@ -381,8 +398,10 @@ class ControlPanel(QWidget):
         self.translator_label.setText(t("translator_label"))
         self.openrouter_key_input.setPlaceholderText(t("openrouter_api_key_placeholder"))
         self.openrouter_model_input.setPlaceholderText(t("openrouter_model_placeholder"))
-        self.gemini_key_input.setPlaceholderText(t("gemini_api_key_placeholder"))
-        self.gemini_model_input.setPlaceholderText(t("gemini_model_placeholder"))
+        self.gemini_ocr_key_input.setPlaceholderText(t("gemini_ocr_api_key_placeholder"))
+        self.gemini_ocr_model_input.setPlaceholderText(t("gemini_ocr_model_placeholder"))
+        self.gemini_key_input.setPlaceholderText(t("gemini_translator_api_key_placeholder"))
+        self.gemini_model_input.setPlaceholderText(t("gemini_translator_model_placeholder"))
         self.custom_api_base_url_input.setPlaceholderText(t("custom_api_base_url_placeholder"))
         self.custom_api_key_input.setPlaceholderText(t("custom_api_key_placeholder"))
         self.custom_api_model_input.setPlaceholderText(t("custom_api_model_placeholder"))
@@ -413,6 +432,7 @@ class ControlPanel(QWidget):
         self.click_through_checkbox.toggled.connect(self.click_through_toggled)
         self.tts_checkbox.toggled.connect(self.tts_toggled)
         self.translator_combo.currentIndexChanged.connect(self.update_visibility)
+        self.ocr_engine_combo.currentIndexChanged.connect(self.update_visibility)
         self.use_custom_prompt_checkbox.toggled.connect(self.update_visibility)
         self.ocr_custom_checkbox.toggled.connect(self.update_ocr_input_visibility)
         self.dest_lang_custom_checkbox.toggled.connect(self.update_dest_lang_input_visibility)
@@ -429,15 +449,22 @@ class ControlPanel(QWidget):
 
     def update_visibility(self):
         selected_translator = self.translator_combo.currentText()
+        selected_ocr_engine = self.ocr_engine_combo.currentText()
+
         is_openrouter = selected_translator == "OpenRouter"
-        is_gemini = selected_translator == "Gemini"
+        is_gemini_translator = selected_translator == "Gemini"
+        is_gemini_ocr = selected_ocr_engine == "Gemini"
         is_custom = selected_translator == "Custom API"
-        is_ai = is_openrouter or is_gemini or is_custom
+        is_ai = is_openrouter or is_gemini_translator or is_custom
 
         self.openrouter_key_input.setVisible(is_openrouter)
         self.openrouter_model_input.setVisible(is_openrouter)
-        self.gemini_key_input.setVisible(is_gemini)
-        self.gemini_model_input.setVisible(is_gemini)
+        
+        self.gemini_ocr_key_input.setVisible(is_gemini_ocr)
+        self.gemini_ocr_model_input.setVisible(is_gemini_ocr)
+        self.gemini_key_input.setVisible(is_gemini_translator)
+        self.gemini_model_input.setVisible(is_gemini_translator)
+        
         self.custom_api_base_url_input.setVisible(is_custom)
         self.custom_api_key_input.setVisible(is_custom)
         self.custom_api_model_input.setVisible(is_custom)
@@ -461,6 +488,7 @@ class ControlPanel(QWidget):
             dest_lang = self.dest_lang_presets.get(selected_preset, "vi")
 
         return {
+            "ocr_engine": self.ocr_engine_combo.currentText(),
             "dest_lang": dest_lang,
             "dest_lang_custom_enabled": self.dest_lang_custom_checkbox.isChecked(),
             "preprocess_enabled": self.preprocess_enabled_checkbox.isChecked(),
@@ -472,6 +500,8 @@ class ControlPanel(QWidget):
             "translator": self.translator_combo.currentText(),
             "openrouter_api_key": self.openrouter_key_input.text(),
             "openrouter_model": self.openrouter_model_input.text(),
+            "gemini_ocr_api_key": self.gemini_ocr_key_input.text(),
+            "gemini_ocr_model": self.gemini_ocr_model_input.text(),
             "gemini_api_key": self.gemini_key_input.text(),
             "gemini_model": self.gemini_model_input.text(),
             "custom_api_base_url": self.custom_api_base_url_input.text(),
@@ -487,6 +517,7 @@ class ControlPanel(QWidget):
         }
 
     def set_config_data(self, config):
+        self.ocr_engine_combo.setCurrentText(config.get("ocr_engine", "EasyOCR"))
         self.lang_combo.setCurrentText(config.get("language", "en"))
         self.preprocess_enabled_checkbox.setChecked(config.get("preprocess_enabled", True))
         self.upscale_checkbox.setChecked(config.get("upscale_enabled", True))
@@ -536,6 +567,8 @@ class ControlPanel(QWidget):
         self.translator_combo.setCurrentText(config.get("translator", "Google"))
         self.openrouter_key_input.setText(config.get("openrouter_api_key", ""))
         self.openrouter_model_input.setText(config.get("openrouter_model", ""))
+        self.gemini_ocr_key_input.setText(config.get("gemini_ocr_api_key", ""))
+        self.gemini_ocr_model_input.setText(config.get("gemini_ocr_model", ""))
         self.gemini_key_input.setText(config.get("gemini_api_key", ""))
         self.gemini_model_input.setText(config.get("gemini_model", ""))
         self.custom_api_base_url_input.setText(config.get("custom_api_base_url", ""))
